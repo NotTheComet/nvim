@@ -13,19 +13,64 @@ return {
     cmd = "Store",
   },
   {
-    'brianhuster/live-preview.nvim',
-   },
-   {
-    'nvim-lualine/lualine.nvim',
-    dependencies = { 'nvim-tree/nvim-web-devicons' }
-   },
-   {
-  	'mrcjkb/rustaceanvim',
- 	-- To avoid being surprised by breaking changes,
- 	 -- I recommend you set a version range
- 	 version = '^9',
- 	 -- This plugin implements proper lazy-loading (see :h lua-plugin-lazy).
- 	 -- No need for lazy.nvim to lazy-load it.
- 	 lazy = false,
-  }
+    "brianhuster/live-preview.nvim",
+  },
+  {
+    "nvim-lualine/lualine.nvim",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+  },
+  {
+    "mrcjkb/rustaceanvim",
+
+    version = "^9",
+    lazy = false,
+  },
+  {
+    "coffebar/neovim-project",
+    opts = {
+      projects = {
+        "~/Documents/GitHub/*",
+        "~/AppData/Local/nvim/*",
+        "~/AppData/Local/neovide/*",
+        "D:/code/*",
+      },
+      picker = {
+        type = "telescope",
+      },
+    },
+    init = function()
+      vim.opt.sessionoptions:append("globals")
+    end,
+    dependencies = {
+      { "nvim-telescope/telescope.nvim" },
+      { "Shatur/neovim-session-manager" },
+    },
+    cond = vim.loop.os_uname().sysname == "Windows_NT",
+    lazy = false,
+    priority = 100,
+  },
+  {
+    "coffebar/neovim-project",
+    opts = {
+      projects = {
+        "~/Documents/GitHub/*",
+        "~/.config/nvim/*",
+        "~/.config/neovide/*",
+        "/Volumes/dev-hdd1/code/*",
+      },
+      picker = {
+        type = "telescope",
+      },
+    },
+    init = function()
+      vim.opt.sessionoptions:append("globals")
+    end,
+    dependencies = {
+      { "nvim-telescope/telescope.nvim" },
+      { "Shatur/neovim-session-manager" },
+    },
+    cond = vim.loop.os_uname().sysname == "Linux" or vim.loop.os_uname().sysname == "Darwin",
+    lazy = false,
+    priority = 100,
+  },
 }
