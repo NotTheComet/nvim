@@ -9,6 +9,9 @@
 
 vim.g.root_spec = { "cwd" }
 
+local bufcheck = vim.api.nvim_create_augroup("BufCheck", { clear = true })
+local neotree = vim.api.nvim_create_augroup("NeoTreeAutoOpen", { clear = true })
+
 -- highlight text on yank
 vim.api.nvim_create_autocmd("TextYankPost", {
   callback = function()
@@ -19,13 +22,13 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 
 -- reload config file on change
 vim.api.nvim_create_autocmd("BufWritePost", {
-  group = "bufcheck",
+  group = bufcheck,
   pattern = vim.env.MYVIMRC,
   command = "silent source %",
 })
 
 vim.api.nvim_create_autocmd("BufEnter", {
-  group = vim.api.nvim_create_augroup("NeoTreeAutoOpen", { clear = true }),
+  group = neotree,
   callback = function()
     -- Ensure we are in a valid file buffer and not another neo-tree buffer
     if vim.bo.buftype == "" and vim.fn.expand("%") ~= "" then
