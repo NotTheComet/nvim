@@ -7,6 +7,8 @@
 -- Or remove existing autocmds by their group name (which is prefixed with `lazyvim_` for the defaults)
 -- e.g. vim.api.nvim_del_augroup_by_name("lazyvim_wrap_spell")
 
+vim.g.root_spec = { "cwd" }
+
 -- highlight text on yank
 vim.api.nvim_create_autocmd("TextYankPost", {
   callback = function()
@@ -28,6 +30,16 @@ vim.api.nvim_create_autocmd("BufEnter", {
     -- Ensure we are in a valid file buffer and not another neo-tree buffer
     if vim.bo.buftype == "" and vim.fn.expand("%") ~= "" then
       require("neo-tree.command").execute({ reveal = true, position = "left" })
+    end
+  end,
+})
+
+vim.api.nvim_create_autocmd("VimEnter", {
+  desc = "Open Neo-tree automatically",
+  callback = function()
+    -- Only auto-open if Neovim is opened without a specific file argument
+    if vim.fn.argc() == 0 then
+      require("neo-tree.command").execute({ toggle = true, position = "left" })
     end
   end,
 })
