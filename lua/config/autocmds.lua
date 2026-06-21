@@ -12,6 +12,16 @@ vim.g.root_spec = { "cwd" }
 local bufcheck = vim.api.nvim_create_augroup("BufCheck", { clear = true })
 local neotree = vim.api.nvim_create_augroup("NeoTreeAutoOpen", { clear = true })
 
+local function is_neotree_open()
+  for _, win in ipairs(vim.api.nvim_list_wins()) do
+    local buf = vim.api.nvim_win_get_buf(win)
+    if vim.api.nvim_get_option_value("filetype", { buf = buf }) == "neo-tree" then
+      return true
+    end
+  end
+  return false
+end
+
 -- highlight text on yank
 vim.api.nvim_create_autocmd("TextYankPost", {
   callback = function()
@@ -27,21 +37,11 @@ vim.api.nvim_create_autocmd("BufWritePost", {
   command = "silent source %",
 })
 
-vim.api.nvim_create_autocmd("BufEnter", {
-  group = neotree,
-  callback = function()
-    -- Ensure we are in a valid file buffer and not another neo-tree buffer
-    if vim.bo.buftype == "" and vim.fn.expand("%") ~= "" then
-      require("neo-tree.command").execute({ reveal = true, position = "left" })
-    end
-  end,
-})
-
-vim.api.nvim_create_autocmd("VimEnter", {
+vim.api.nvim_create_autocmd("BufNew", {
   desc = "Open Neo-tree automatically",
   callback = function()
     -- Only auto-open if Neovim is opened without a specific file argument
-    if vim.fn.argc() == 0 then
+    if vim.fn.argc() and not is_neotree_open() == 0 then
       require("neo-tree.command").execute({ toggle = true, position = "left" })
     end
   end,

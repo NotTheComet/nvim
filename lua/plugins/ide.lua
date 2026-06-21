@@ -93,6 +93,20 @@ return {
         use_libuv_file_watcher = true,
         bind_to_cwd = true,
         sync_root_with_cwd = true,
+        filtered_items = {
+          visible = true, -- Show hidden files by default
+          hide_dotfiles = false, -- Don't hide dotfiles (e.g. .env, .gitignore)
+          hide_gitignored = false, -- Don't hide files skipped by git
+          hide_by_name = {
+            "node_modules", -- Comment out or remove items you want to see
+          },
+          never_show = {
+            ".DS_Store",
+          },
+          hide_by_pattern = {
+            "**/._*",
+          },
+        },
       },
     },
   },
